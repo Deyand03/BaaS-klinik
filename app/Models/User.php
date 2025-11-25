@@ -45,4 +45,11 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function pasien(){
+        return $this->hasOne(ProfilPasien::class, 'user_id', 'id');
+    }
+    public function staff(){
+        return $this->hasOne(Staff::class, 'user_id', 'id');
+    }
 }
