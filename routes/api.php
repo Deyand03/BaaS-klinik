@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+
+// Klinik Umum API
+
 Route::get('/klinik-umum/doctors', function (Request $request) {
 
     // Ambil ID Klinik dari parameter '?clinic_id=1'
@@ -23,3 +26,13 @@ Route::get('/klinik-umum/doctors', function (Request $request) {
         'data' => $doctors
     ]);
 });
+
+
+
+// Klinik Mata
+
+
+// Klinik Gizi
+
+
+// Klinik Umum
