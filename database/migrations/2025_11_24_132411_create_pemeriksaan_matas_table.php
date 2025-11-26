@@ -12,15 +12,21 @@ return new class extends Migration {
     {
         Schema::create('pemeriksaan_mata', function (Blueprint $table) {
             $table->id();
-            // Relasi ke Induk Rekam Medis
             $table->foreignId('id_rekam_medis')->constrained('rekam_medis')->cascadeOnDelete();
 
-            // Data Spesifik Mata
-            $table->string('visus_od')->nullable(); // Kanan
-            $table->string('visus_os')->nullable(); // Kiri
-            $table->string('koreksi_sphere')->nullable(); // Minus/Plus
-            $table->string('koreksi_cylinder')->nullable();
-            $table->string('axis')->nullable();
+            // --- MATA KANAN (OD) ---
+            $table->string('visus_od')->nullable();      // Ketajaman Penglihatan
+            $table->string('sphere_od')->nullable();     // Spheris (Minus/Plus)
+            $table->string('cylinder_od')->nullable();   // Silinder
+            $table->string('axis_od')->nullable();       // Sumbu Silinder
+
+            // --- MATA KIRI (OS) ---
+            $table->string('visus_os')->nullable();
+            $table->string('sphere_os')->nullable();
+            $table->string('cylinder_os')->nullable();
+            $table->string('axis_os')->nullable();
+
+            $table->string('pd')->nullable(); // Pupillary Distance (Jarak Pupil)
 
             $table->timestamps();
         });
