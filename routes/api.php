@@ -35,4 +35,7 @@ Route::get('/klinik-umum/doctors', function (Request $request) {
 // Klinik Gizi
 
 
-// Klinik Umum
+// Klinik Gigi
+
+
+// Klinik Kumin
