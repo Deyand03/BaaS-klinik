@@ -1,41 +1,48 @@
 <?php
 
+use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BookingController;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
 
-// Klinik Umum API
+// Pasien
+// Beranda, Login, Regis (Agne)
+Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/klinik-umum/doctors', function (Request $request) {
+Route::middleware('auth:sanctum')->group(function(){
+    Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/p  rofile', function(Request $request){
+        return $request->user();
+    });
+});
+// Cari Dokter (Zikra)
 
-    // Ambil ID Klinik dari parameter '?clinic_id=1'
-    $clinicId = $request->query('klinik_id');
+// Fasilitas & Layanan
 
-    // Cari staf yang perannya dokter di klinik tersebut
-    $doctors = Staff::where('id_klinik', $clinicId)
+// Riwayat Reservasi()
+
+
+// Admin
+// Dashboard
+
+// Rekam Medis
+
+// Pembayaran
+
+// Jadwal Dokter
+Route::get('/admin/jadwal-dokter', function (Request $request) {
+    $data = $request->query('user_id');
+    $staff = Staff::where('user_id', $data)->first();
+    $jadwal = Staff::where('id_klinik', $staff->id_klinik)
         ->where('peran', 'dokter')
-        ->with('jadwal') // Pastikan relasi di Model Staf ada: public function jadwal_praktek()
-        ->get();
+        ->with('jadwal')->get();
 
     return response()->json([
         'status' => 'success',
-        'data' => $doctors
+        'data' => $jadwal
     ]);
 });
 
-
-
-// Klinik Mata
-
-
-// Klinik Gizi
-
-
-// Klinik Gigi
-
-
-// Klinik Kumin
+// Rujukan Digital

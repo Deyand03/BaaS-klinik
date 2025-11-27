@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('hari'); // Senin, Selasa...
             $table->time('jam_mulai');
             $table->time('jam_selesai');
-            $table->integer('kuota');
+            $table->integer('kuota_harian')->default(10);
             $table->boolean('status_aktif')->default(true);
             $table->timestamps();
         });
