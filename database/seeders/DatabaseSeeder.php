@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
 
         // 3. Bikin User untuk Dokter (Generic Role: 'staff')
         $userDokter = User::create([
-            'name' => 'Dr. Budi', // Opsional, krn nama asli ada di tabel staf
             'email' => 'dokter@umum.com',
             'password' => Hash::make('password'),
             'role' => 'staff', // <--- INI YANG KITA SEPAKATI (Generic)

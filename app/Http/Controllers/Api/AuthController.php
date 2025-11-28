@@ -24,6 +24,12 @@ class AuthController extends Controller
         }
 
         $token = $user->createToken('auth_token')->plainTextToken;
+        if($user->role == 'staff' || $user->role == 'dokter'){
+            $user->load('staff');
+        }else{
+            $user->load('pasien');
+        }
+
 
         return response()->json([
             'message' => 'Login sukses',

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingController;
+use App\Models\Kunjungan;
 use App\Models\Staff;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -12,8 +13,8 @@ use Illuminate\Support\Facades\Route;
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function(){
-    Route::post('/logout', [AuthController::class, 'logout']);
-    Route::get('/p  rofile', function(Request $request){
+    Route::post('/logout.process', [AuthController::class, 'logout']);
+    Route::get('/profile', function(Request $request){
         return $request->user();
     });
 });
@@ -28,21 +29,21 @@ Route::middleware('auth:sanctum')->group(function(){
 // Dashboard
 
 // Rekam Medis
-
+Route::get('/admin/rekam-medis', function(Request $request){
+    //
+});
 // Pembayaran
 
 // Jadwal Dokter
-Route::get('/admin/jadwal-dokter', function (Request $request) {
-    $data = $request->query('user_id');
-    $staff = Staff::where('user_id', $data)->first();
-    $jadwal = Staff::where('id_klinik', $staff->id_klinik)
-        ->where('peran', 'dokter')
-        ->with('jadwal')->get();
+Route::middleware('auth:sanctum')->group(function(){
+    Route::get('/admin/jadwal-dokter', function(Request $request){
+        $staffId = $request->query('staff_id');
+        $jadwalDokter = Staff::where('id', $staffId)->with('jadwal')->get();
 
-    return response()->json([
-        'status' => 'success',
-        'data' => $jadwal
-    ]);
+        return response()->json([
+            'jadwal_dokter' => $jadwalDokter,
+            'status' => 'success'
+        ]);
+    });
 });
-
 // Rujukan Digital
