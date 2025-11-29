@@ -15,6 +15,7 @@ return new class extends Migration {
             $table->string('nama');
             $table->string('slug')->unique();
             $table->string('alamat');
+            $table->string('no_dana');
             $table->string('logo')->nullable();
             $table->timestamps();
         });

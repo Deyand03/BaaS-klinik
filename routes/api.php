@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\JadwalDokterController;
 use App\Models\Kunjungan;
 use App\Models\Staff;
 use Illuminate\Http\Request;
@@ -36,14 +37,9 @@ Route::get('/admin/rekam-medis', function(Request $request){
 
 // Jadwal Dokter
 Route::middleware('auth:sanctum')->group(function(){
-    Route::get('/admin/jadwal-dokter', function(Request $request){
-        $staffId = $request->query('staff_id');
-        $jadwalDokter = Staff::where('id', $staffId)->with('jadwal')->get();
-
-        return response()->json([
-            'jadwal_dokter' => $jadwalDokter,
-            'status' => 'success'
-        ]);
-    });
+    Route::get('/admin/jadwal-dokter', [JadwalDokterController::class, 'index']);
+    Route::post('/admin/jadwal-dokter/store', [JadwalDokterController::class, 'store']);
+    Route::get('/admin/jadwal-dokter/list-dokter', [JadwalDokterController::class, 'getDoctorsList']);
+    Route::put('/admin/jadwal-dokter/{id}', [JadwalDokterController::class, 'edit']);
 });
 // Rujukan Digital
