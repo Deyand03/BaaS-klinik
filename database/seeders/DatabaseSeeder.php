@@ -40,7 +40,6 @@ class DatabaseSeeder extends Seeder
 
         // 5. Bikin User untuk Admin Klinik (Generic Role: 'staff')
         $userAdmin = User::create([
-            'name' => 'Admin Siti',
             'email' => 'admin@umum.com',
             'password' => Hash::make('password'),
             'role' => 'staff',
