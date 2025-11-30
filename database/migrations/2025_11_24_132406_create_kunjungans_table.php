@@ -18,7 +18,7 @@ return new class extends Migration {
             $table->foreignId('id_jadwal')->nullable()->constrained('jadwal_praktek');
 
             $table->date('tgl_kunjungan');
-            $table->string('no_antrian'); // A-001
+            $table->string('no_antrian')->unique(); // A-001
             $table->text('keluhan')->nullable();
             // Status sudah update sesuai request: ada 'check_in'
             $table->enum('status', ['booking', 'check_in', 'diperiksa', 'selesai', 'batal'])->default('booking');

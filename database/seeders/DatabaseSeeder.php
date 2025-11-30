@@ -6,7 +6,9 @@ use App\Models\User;
 use App\Models\Klinik;
 use App\Models\Staff;
 use App\Models\JadwalPraktek;
+use App\Models\ProfilPasien;
 use Illuminate\Database\Seeder;
+use Database\Seeders\KunjunganSeeder;
 use Illuminate\Support\Facades\Hash;
 
 class DatabaseSeeder extends Seeder
@@ -15,19 +17,39 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Bikin Klinik Umum (ID 1)
         // Pastikan ID ini 1, karena frontend hardcode ID 1
-        $this->call([
-            KlinikSeeder::class,
-        ]);
+        try{
+            $this->call([
+                // KlinikSeeder::class,
+                KunjunganSeeder::class
+            ]);
+            $profilPasien = ProfilPasien::create([
+                'user_id' => 3,
+                'nik' => '123456789010',
+                'nama_lengkap'=> 'Muammar Irfan',
+                'tgl_lahir' => '2002-12-20',
+                'jenis_kelamin' => 'Laki-laki',
+                'alamat' => 'Gaada',
+                'no_hp' => '081234567890',
+                'gol_darah' => 'A',
+                'riwayat_alergi' => 'Udang'
+            ]);
+            $userBiasa = User::create([
+                'name' => 'Dokter irfan',
+                'email' => 'dokter@biasa.com',
+                'password' => Hash::make('password'),
+                'role' => 'pasien', // <--- INI YANG KITA SEPAKATI (Generic)
+            ]);
         // ---------------------------------------------------------
 
         // 3. Bikin User untuk Dokter (Generic Role: 'staff')
         $userDokter = User::create([
+            'name' => 'Dokter Marr',
             'email' => 'dokter@umum.com',
             'password' => Hash::make('password'),
             'role' => 'staff', // <--- INI YANG KITA SEPAKATI (Generic)
         ]);
 
-        // 4. Bikin Profil Staf (Specific Role: 'dokter')
+        // // 4. Bikin Profil Staf (Specific Role: 'dokter')
         $stafDokter = Staff::create([
             'user_id' => $userDokter->id,
             'id_klinik' => 1,
@@ -36,9 +58,9 @@ class DatabaseSeeder extends Seeder
             'spesialisasi' => 'Dokter Umum',
         ]);
 
-        // ---------------------------------------------------------
+        // // ---------------------------------------------------------
 
-        // 5. Bikin User untuk Admin Klinik (Generic Role: 'staff')
+        // // 5. Bikin User untuk Admin Klinik (Generic Role: 'staff')
         $userAdmin = User::create([
             'name' => 'Admin Siti',
             'email' => 'admin@umum.com',
@@ -46,7 +68,7 @@ class DatabaseSeeder extends Seeder
             'role' => 'staff',
         ]);
 
-        // 6. Bikin Profil Staf (Specific Role: 'admin')
+        // // 6. Bikin Profil Staf (Specific Role: 'admin')
         Staff::create([
             'user_id' => $userAdmin->id,
             'id_klinik' => 1,
@@ -55,9 +77,9 @@ class DatabaseSeeder extends Seeder
             'spesialisasi' => null,
         ]);
 
-        // ---------------------------------------------------------
+        // // ---------------------------------------------------------
 
-        // 7. Bikin Jadwal Praktek Dokter Budi
+        // // 7. Bikin Jadwal Praktek Dokter Budi
         JadwalPraktek::create([
             'id_staff' => $stafDokter->id,
             'hari' => 'Senin',
@@ -67,5 +89,9 @@ class DatabaseSeeder extends Seeder
         ]);
 
         echo "Data Dummy (Revisi) Berhasil Dibuat! \n";
+        }catch(\Exception $e){
+            dump($e->getMessage());
+        }
+
     }
 }

@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->foreignId('id_staff')->constrained('staff'); // Siapa yang terima duit
 
             $table->decimal('total_biaya', 12, 2);
-            $table->enum('metode_bayar', ['cash'])->default('cash');
+            $table->enum('metode_bayar', ['digital'])->default('digital');
             $table->enum('status', ['pending', 'lunas', 'batal'])->default('pending');
 
             $table->timestamps();
