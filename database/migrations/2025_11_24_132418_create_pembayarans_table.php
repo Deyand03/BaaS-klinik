@@ -17,7 +17,7 @@ return new class extends Migration {
 
             $table->decimal('total_biaya', 12, 2);
             $table->enum('metode_bayar', ['cash'])->default('cash');
-            $table->enum('status', ['pending', 'lunas', 'batal'])->default('pending');
+            $table->enum('status', ['belum_bayar', 'sudah_bayar', 'batal'])->default('belum_bayar');
 
             $table->timestamps();
         });

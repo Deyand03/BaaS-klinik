@@ -21,7 +21,7 @@ return new class extends Migration {
             $table->string('no_antrian'); // A-001
             $table->text('keluhan')->nullable();
             // Status sudah update sesuai request: ada 'check_in'
-            $table->enum('status', ['booking', 'check_in', 'diperiksa', 'selesai', 'batal'])->default('booking');
+            $table->enum('status', ['belum_bayar', 'booking', 'diperiksa', 'selesai', 'batal'])->default('booking');
             $table->timestamps();
         });
     }

@@ -31,7 +31,6 @@ class DatabaseSeeder extends Seeder
 
         // 3. User Dokter
         $userDokter = User::create([
-            'name' => 'Dr. Budi',
             'email' => 'dokter@umum.com',
             'password' => Hash::make('password'),
             'role' => 'staff',
@@ -48,7 +47,6 @@ class DatabaseSeeder extends Seeder
 
         // 5. User Admin
         $userAdmin = User::create([
-            'name' => 'Admin Siti',
             'email' => 'admin@umum.com',
             'password' => Hash::make('password'),
             'role' => 'staff',
@@ -69,6 +67,7 @@ class DatabaseSeeder extends Seeder
             'hari' => 'Senin',
             'jam_mulai' => '08:00:00',
             'jam_selesai' => '12:00:00',
+            'kuota_harian' => 10,
             'status_aktif' => true,
         ]);
 
