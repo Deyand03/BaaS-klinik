@@ -16,7 +16,7 @@ return new class extends Migration {
 
             // Data Spesifik Gizi
             $table->float('tinggi_badan');
-            $table->float('berat_badan');
+            // $table->float('berat_badan');
             $table->float('imt')->nullable(); // Indeks Massa Tubuh
             $table->float('lingkar_perut')->nullable();
             $table->string('status_gizi')->nullable(); // Normal/Obesitas
