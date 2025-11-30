@@ -18,6 +18,7 @@ return new class extends Migration {
             $table->decimal('total_biaya', 12, 2);
             $table->enum('metode_bayar', ['digital'])->default('digital');
             $table->enum('status', ['pending', 'lunas', 'batal'])->default('pending');
+            $table->string('bukti_pembayaran');
 
             $table->timestamps();
         });

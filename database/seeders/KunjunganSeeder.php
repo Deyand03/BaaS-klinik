@@ -35,6 +35,7 @@ class KunjunganSeeder extends Seeder
         'id_kunjungan' => $idKunjunganBaru, // Menggunakan ID Kunjungan yang baru dibuat
         'id_staff' => 1,
         'total_biaya' => 0,
+        'bukti_pembayaran' => 'pembayaran.jpg',
         'metode_bayar' => 'digital',
         'status' => 'pending',
         // 'created_at' dan 'updated_at' dihapus agar diisi otomatis oleh Eloquent
