@@ -35,7 +35,13 @@ class Kunjungan extends Model
         return $this->belongsTo(Pasien::class, 'id_pasien', 'id');
     }
 
-    public function staff()
+    // Di app/Models/Kunjungan.php
+
+    // GANTI DARI INI:
+    // public function staff() { ... }
+
+    // JADI INI:
+    public function dokter()
     {
         return $this->belongsTo(Staff::class, 'id_dokter', 'id');
     }

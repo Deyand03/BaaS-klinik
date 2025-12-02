@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('resep', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_rekam_medis')->constrained('rekam_medis');
+            $table->foreignId('id_rekam_medis')->constrained('rekam_medis')->cascadeOnDelete();
             $table->foreignId('id_obat')->constrained('obat'); // Stok ngurangin dari sini
             $table->integer('jumlah');
             $table->string('aturan_pakai');

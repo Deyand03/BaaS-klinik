@@ -1,27 +1,37 @@
 <?php
 
+use App\Models\Obat;
+use App\Models\Staff;
+use App\Models\Kunjungan;
+use App\Models\RekamMedis;
+use Illuminate\Http\Request;
+use App\Models\PemeriksaanGizi;
+use App\Models\PemeriksaanMata;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\OperasionalController;
 use App\Http\Controllers\Api\JadwalDokterController;
-use App\Models\Kunjungan;
-use App\Models\Staff;
-use App\Models\RekamMedis;
-use App\Models\PemeriksaanMata;
-use App\Models\PemeriksaanGizi;
-use App\Models\Obat;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 
 // Pasien
 // Beranda, Login, Regis (Agne)
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']); // <--- TAMBAHKAN INI
 
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout.process', [AuthController::class, 'logout']);
-    Route::get('/profile', function(Request $request){
+    Route::get('/profile', function (Request $request) {
         return $request->user();
     });
+
+    // Route Booking
+    Route::post('/booking', [BookingController::class, 'store']);
+    Route::get('/booking/{id}', [BookingController::class, 'show']);
+
+    // API OPERASIONAL
+    Route::get('/admin/antrian', [OperasionalController::class, 'index']);
+    Route::post('/admin/antrian/{id}/status', [OperasionalController::class, 'updateStatus']);
 });
 // Cari Dokter (Zikra)
 
@@ -67,13 +77,13 @@ Route::get('/admin/rekam-medis', function (Request $request) {
         'pemeriksaan_mata',
         'resep.obat'
     ])
-    ->whereHas('kunjungan', function ($q) use ($dokterIds) {
-        $q->whereIn('id_dokter', $dokterIds);
-    })
-    ->get();
+        ->whereHas('kunjungan', function ($q) use ($dokterIds) {
+            $q->whereIn('id_dokter', $dokterIds);
+        })
+        ->get();
 
     $kunjungan = $rekam->pluck('kunjungan')->unique('id')->values();
-    
+
     return response()->json([
         'rekam_medis' => $rekam,
         'kunjungan'   => $kunjungan,
@@ -84,7 +94,7 @@ Route::get('/admin/rekam-medis', function (Request $request) {
 });
 
 // Route::middleware('auth:sanctum')->post('/rekam-medis/tambah', function (Request $request) {
-    
+
 //     $validated = $request->validate([
 //         'id_kunjungan' => 'required|integer',
 //         'anamnesa' => 'nullable|string',
@@ -158,7 +168,7 @@ Route::get('/admin/rekam-medis', function (Request $request) {
 // Pembayaran
 
 // Jadwal Dokter
-Route::middleware('auth:sanctum')->group(function(){
+Route::middleware('auth:sanctum')->group(function () {
     Route::get('/admin/jadwal-dokter', [JadwalDokterController::class, 'index']);
     Route::post('/admin/jadwal-dokter/store', [JadwalDokterController::class, 'store']);
     Route::get('/admin/jadwal-dokter/list-dokter', [JadwalDokterController::class, 'getDoctorsList']);
