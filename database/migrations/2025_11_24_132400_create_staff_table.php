@@ -14,8 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
             $table->foreignId('id_klinik')->constrained('klinik')->cascadeOnDelete();
-            $table->string('nama');
-            $table->enum('peran', ['dokter', 'admin', 'perawat']);
+            $table->string('nama_lengkap'); // Ganti 'nama'
+            $table->enum('peran', ['dokter', 'admin', 'perawat', 'resepsionis', 'kasir']);
             $table->string('no_hp')->nullable();
             $table->string('spesialisasi')->nullable(); // Khusus dokter
             $table->timestamps();

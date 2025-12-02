@@ -9,31 +9,39 @@ class Kunjungan extends Model
     protected $table = 'kunjungan';
     protected $guarded = [];
 
-    public function rekam_medis(){
+    public function rekam_medis()
+    {
         return $this->hasOne(RekamMedis::class, 'id_kunjungan', 'id');
     }
 
-    public function rujukan(){
+    public function rujukan()
+    {
         return $this->hasOne(Rujukan::class, 'id_kunjungan', 'id');
     }
 
-    public function pembayaran(){
+    public function pembayaran()
+    {
         return $this->hasOne(Pembayaran::class, 'id_kunjungan', 'id');
     }
 
-    public function klinik(){
+    public function klinik()
+    {
         return $this->belongsTo(Klinik::class, 'id_klinik', 'id');
     }
 
-    public function pasien(){
-        return $this->belongsTo(ProfilPasien::class, 'id_pasien', 'id');
+    public function pasien()
+    {
+        // FIX: Arahkan ke Pasien::class
+        return $this->belongsTo(Pasien::class, 'id_pasien', 'id');
     }
 
-    public function staff(){
+    public function staff()
+    {
         return $this->belongsTo(Staff::class, 'id_dokter', 'id');
     }
 
-    public function jadwal(){
+    public function jadwal()
+    {
         return $this->belongsTo(JadwalPraktek::class, 'id_jadwal', 'id');
     }
 }

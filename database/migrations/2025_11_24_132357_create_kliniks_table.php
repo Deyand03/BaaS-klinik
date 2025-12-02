@@ -15,7 +15,11 @@ return new class extends Migration {
             $table->string('nama');
             $table->string('slug')->unique();
             $table->string('alamat');
-            $table->string('no_dana');
+
+            // REVISI DOSEN: Ganti no_dana jadi info_pembayaran
+            // $table->string('no_dana'); <--- HAPUS INI
+            $table->text('info_pembayaran')->nullable(); // <--- GANTI INI
+
             $table->string('logo')->nullable();
             $table->timestamps();
         });

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -10,35 +9,20 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
-        'name',
+        // 'name', <--- SUDAH KITA HAPUS DARI MIGRATION
         'email',
         'password',
+        'role', // <--- WAJIB ADA (biar bisa diisi 'staff' atau 'pasien')
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
@@ -47,10 +31,14 @@ class User extends Authenticatable
         ];
     }
 
-    public function pasien(){
-        return $this->hasOne(ProfilPasien::class, 'user_id', 'id');
+    // FIX: Arahkan ke model Pasien yang baru
+    public function pasien()
+    {
+        return $this->hasOne(Pasien::class, 'user_id', 'id');
     }
-    public function staff(){
+
+    public function staff()
+    {
         return $this->hasOne(Staff::class, 'user_id', 'id');
     }
 }

@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('kunjungan', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_klinik')->constrained('klinik');
-            $table->foreignId('id_pasien')->constrained('profil_pasien');
+            $table->foreignId('id_pasien')->constrained('pasiens'); // Arahkan ke 'pasiens'
             $table->foreignId('id_dokter')->constrained('staff');
             $table->foreignId('id_jadwal')->nullable()->constrained('jadwal_praktek');
 
@@ -21,7 +21,14 @@ return new class extends Migration {
             $table->string('no_antrian'); // A-001
             $table->text('keluhan')->nullable();
             // Status sudah update sesuai request: ada 'check_in'
-            $table->enum('status', ['belum_bayar', 'booking', 'diperiksa', 'selesai', 'batal'])->default('booking');
+            $table->enum('status', [
+                'booking',
+                'menunggu_perawat', // Filter Dashboard Perawat
+                'menunggu_dokter',  // Filter Dashboard Dokter
+                'menunggu_pembayaran', // Filter Dashboard Kasir
+                'selesai',
+                'batal'
+            ])->default('booking');
             $table->timestamps();
         });
     }

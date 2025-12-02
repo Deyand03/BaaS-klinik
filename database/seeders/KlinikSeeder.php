@@ -2,53 +2,35 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class KlinikSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
         DB::table('klinik')->insert([
             [
                 "nama" => "Klinik X Subhan",
                 "slug" => "klinik-umum",
-                "no_dana" => "081223454567",
+                // Ganti no_dana jadi info_pembayaran
+                "info_pembayaran" => "DANA: 081223454567, BCA: 12345678",
                 "alamat" => "Mendalo Indah",
                 "logo" => "placeholder.png",
+                "created_at" => now(),
+                "updated_at" => now(),
             ],
+            // ... (Lanjutkan untuk klinik lainnya dengan format sama)
             [
-                "nama" => "klinik",
+                "nama" => "Klinik Mata Sehat",
                 "slug" => "klinik-mata",
-                "no_dana" => "0812234523451",
+                "info_pembayaran" => "DANA: 081223452345",
                 "alamat" => "Mendalo Indah",
                 "logo" => "placeholder.png",
+                "created_at" => now(),
+                "updated_at" => now(),
             ],
-            [
-                "nama" => "klinik",
-                "slug" => "klinik-gizi",
-                "no_dana" => "081223454631",
-                "alamat" => "Mendalo Indah",
-                "logo" => "placeholder.png",
-            ],
-            [
-                "nama" => "klinik",
-                "slug" => "klinik-gigi",
-                "no_dana" => "0812234534612",
-                "alamat" => "Mendalo Indah",
-                "logo" => "placeholder.png",
-            ],
-            [
-                "nama" => "klinik",
-                "slug" => "klinik-kumin",
-                "no_dana" => "08122345123123",
-                "alamat" => "Mendalo Indah",
-                "logo" => "placeholder.png",
-            ],
+            // ... dst
         ]);
     }
 }

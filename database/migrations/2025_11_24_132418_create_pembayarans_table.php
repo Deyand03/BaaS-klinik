@@ -13,12 +13,14 @@ return new class extends Migration {
         Schema::create('pembayaran', function (Blueprint $table) {
             $table->id();
             $table->foreignId('id_kunjungan')->constrained('kunjungan');
-            $table->foreignId('id_staff')->constrained('staff'); // Siapa yang terima duit
+            $table->foreignId('id_staff')->constrained('staff');
 
             $table->decimal('total_biaya', 12, 2);
-            $table->enum('metode_bayar', ['cash'])->default('cash');
-            $table->enum('status', ['belum_bayar', 'sudah_bayar', 'batal'])->default('belum_bayar');
 
+            // REVISI DOSEN: Tambah opsi metode bayar
+            $table->enum('metode_bayar', ['cash', 'qris', 'transfer', 'ewallet'])->default('cash');
+
+            $table->enum('status', ['belum_bayar', 'sudah_bayar', 'batal'])->default('belum_bayar');
             $table->timestamps();
         });
     }
