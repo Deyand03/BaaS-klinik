@@ -26,7 +26,7 @@ class JadwalDokterController extends Controller
             $query->where('id_klinik', $clinicId);
         }
 
-        $doctors = $query->select('id', 'nama')->get();
+        $doctors = $query->select('id', 'nama_lengkap')->get();
 
         return response()->json(['data' => $doctors]);
     }
@@ -79,7 +79,7 @@ class JadwalDokterController extends Controller
             return [
                 'id' => $dokter->id,
                 'staff_id' => $dokter->id,
-                'dokter' => $dokter->nama,
+                'dokter' => $dokter->nama_lengkap,
                 'spesialis' => $dokter->spesialisasi ?? 'Umum',
                 'hari' => $items->pluck('hari')->toArray(),
 
