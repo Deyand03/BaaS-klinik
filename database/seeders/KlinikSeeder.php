@@ -18,7 +18,7 @@ class KlinikSeeder extends Seeder
         DB::table('klinik')->insert([
             // 1. Klinik Umum (Utama)
             [
-                "nama" => "Klinik X Subhan",
+                "nama" => "Klinik Umum",
                 "slug" => "klinik-umum",
                 "info_pembayaran" => "DANA: 081223454567, BCA: 12345678",
                 "alamat" => "Mendalo Indah, Jambi Luar Kota",
