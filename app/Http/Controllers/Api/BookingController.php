@@ -112,4 +112,60 @@ class BookingController extends Controller
 
         return response()->json(['data' => $kunjungan]);
     }
+
+    public function getRiwayat(Request $request)
+    {
+        // Pastikan user sudah login
+        $user = $request->user();
+
+        // 1. Ambil ID Pasien dari user yang sedang login
+        $pasien = Pasien::where('user_id', $user->id)->first();
+
+        if (!$pasien) {
+            return response()->json(['message' => 'Profil pasien tidak ditemukan.'], 404);
+        }
+
+        // 2. Query data Kunjungan dengan Eager Loading
+        $kunjungans = Kunjungan::where('id_pasien', $pasien->id)
+            ->with(['dokter', 'klinik', 'rujukan']) // Tambah relasi 'rujukan' untuk Surat Rujukan
+            ->orderBy('tgl_kunjungan', 'desc')
+            ->get()
+
+            // 3. Map (Format) data agar sesuai dengan 7 kolom tabel frontend
+            ->map(function ($kunjungan) {
+                // Pastikan nama kolom di $kunjungan sesuai dengan kolom di tabel 'kunjungan'
+                return [
+                    'id' => $kunjungan->id,
+                    // Kolom 1: No. Antrian (Menggunakan field 'no_antrian' yang sudah Anda simpan di store)
+                    'nomor_antrian' => $kunjungan->no_antrian,
+
+                    // Kolom 2: Klinik (Diambil dari relasi klinik)
+                    'klinik' => $kunjungan->klinik->nama_klinik, // Asumsi nama field di tabel Klinik adalah 'nama_klinik'
+
+                    // Kolom 3: Nama Dokter (Diambil dari relasi dokter)
+                    'nama_dokter' => $kunjungan->dokter->nama_lengkap, // Asumsi nama field di tabel Staff adalah 'nama_lengkap'
+
+                    // Kolom 4: Tgl Kunjungan (Diformat)
+                    'tanggal_kunjungan' => Carbon::parse($kunjungan->tgl_kunjungan)->format('d M Y'),
+
+                    // Kolom 5: Keluhan
+                    'keluhan' => $kunjungan->keluhan,
+
+                    // Kolom 6: Status
+                    'status' => ucfirst($kunjungan->status), // Mengubah huruf depan jadi kapital
+
+                    // Kolom 7: Surat Rujukan (Cek apakah ada data rujukan)
+                    'surat_rujukan' => $kunjungan->rujukan ? $kunjungan->rujukan->nama_file : 'Tidak Ada',
+
+                    // Tambahan: ID untuk link download jika diperlukan
+                    'rujukan_id' => $kunjungan->rujukan ? $kunjungan->rujukan->id : null,
+                ];
+            });
+
+        // 4. Kembalikan data dalam bentuk JSON
+        return response()->json([
+            'status' => 'success',
+            'data' => $kunjungans,
+        ]);
+    }
 }

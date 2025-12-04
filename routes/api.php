@@ -38,6 +38,7 @@ Route::middleware('auth:sanctum')->group(function () {
 // Fasilitas & Layanan
 
 // Riwayat Reservasi()
+Route::get('/riwayat-reservasi', [BookingController::class, 'getRiwayat']);
 
 
 // Admin
