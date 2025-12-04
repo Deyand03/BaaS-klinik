@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\OperasionalController;
 use App\Http\Controllers\Api\JadwalDokterController;
+use App\Http\Controllers\Api\PerawatController;
 
 
 // Pasien
@@ -86,10 +87,10 @@ Route::get('/admin/rekam-medis', function (Request $request) {
 
     return response()->json([
         'rekam_medis' => $rekam,
-        'kunjungan'   => $kunjungan,
-        'klinik_id'   => $idKlinik,
-        'status'      => 'success',
-        'obat'        => $obat
+        'kunjungan' => $kunjungan,
+        'klinik_id' => $idKlinik,
+        'status' => 'success',
+        'obat' => $obat
     ]);
 });
 
@@ -175,3 +176,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('/admin/jadwal-dokter/{id}', [JadwalDokterController::class, 'edit']);
 });
 // Rujukan Digital
+
+
+// Perawat (yang saya pakai)
+Route::get('/perawat/antrian', [PerawatController::class, 'index']);
+Route::post('/perawat/input-vital/{id}', [PerawatController::class, 'storeVital']);
