@@ -20,6 +20,12 @@ class OperasionalController extends Controller
 
         $query = Kunjungan::with(['pasien', 'dokter', 'klinik', 'jadwal'])
             ->orderBy('id', 'asc');
+        
+        
+        if ($request->filled('klinik_id_filter')) {
+            $query->where('id_klinik', $request->klinik_id_filter);
+        }
+
 
         // BEST PRACTICE: Pakai 'filled' (Lebih aman daripada 'has')
         if ($request->filled('status_filter')) {
