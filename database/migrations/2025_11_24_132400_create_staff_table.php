@@ -18,6 +18,9 @@ return new class extends Migration {
             $table->enum('peran', ['dokter', 'admin', 'perawat', 'resepsionis', 'kasir']);
             $table->string('no_hp')->nullable();
             $table->string('spesialisasi')->nullable(); // Khusus dokter
+            $table->string('tentang')->nullable(); // Khusus dokter
+            $table->string('pengalaman')->nullable(); // Khusus dokter
+            $table->string('foto_profil')->nullable(); // Khusus dokter
             $table->timestamps();
         });
     }

@@ -4,6 +4,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Api\AuthController;
 
+
+use App\Http\Controllers\Api\PerawatController;
+
+// Menampilkan daftar antrian
+// Route::get('/perawat', function () {
+//     $controller = new PerawatController();
+//     $response = $controller->index();  // ambil data dari controller
+//     $antrian = $response->getData(true)['data']; // ambil array
+
+//     return view('perawat', ['antrian' => $antrian]);
+// });
+// Route::post('/perawat/input-vital/{id}', [PerawatController::class, 'storeVital'])->name('perawat.storeVital');
 Route::get('/', function () {
     return view('welcome');
 });
@@ -20,4 +32,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
+
+
