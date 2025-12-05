@@ -2,6 +2,8 @@
 
 use App\Models\Obat;
 use App\Models\Staff;
+use App\Models\Pasien;
+use App\Models\JadwalPraktek;
 use App\Models\Kunjungan;
 use App\Models\RekamMedis;
 use Illuminate\Http\Request;
@@ -12,6 +14,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\OperasionalController;
 use App\Http\Controllers\Api\JadwalDokterController;
+use App\Http\Controllers\Api\RegisterPasienController;
 
 
 // Pasien
@@ -42,6 +45,19 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Admin
 // Dashboard
+
+// resepsionis
+// RESEPSIONIS – REGISTER PASIEN
+Route::prefix('resepsionis')->group(function () {
+
+    Route::get('/pasien', [RegisterPasienController::class, 'listPasien']);
+    Route::post('/pasien/tambah', [RegisterPasienController::class, 'storePasien']);
+    Route::post('/users/tambah', [RegisterPasienController::class, 'storeUser']);
+    Route::get('/dokter', [RegisterPasienController::class, 'listDokter']);
+    Route::post('/kunjungan/tambah', [RegisterPasienController::class, 'storeKunjungan']);
+});
+
+
 
 // Rekam Medis
 Route::get('/admin/rekam-medis', function (Request $request) {
