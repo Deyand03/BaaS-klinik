@@ -17,7 +17,7 @@ return new class extends Migration {
             $table->time('jam_mulai');
             $table->time('jam_selesai');
             $table->integer('kuota_harian')->default(10);
-            $table->boolean('status_aktif')->default(true);
+            $table->enum('status', ['Aktif', 'Nonaktif'])->default('Aktif');
             $table->timestamps();
         });
     }
