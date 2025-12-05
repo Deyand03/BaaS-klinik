@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\StaffController;
 use App\Models\Obat;
 use App\Models\Staff;
 use App\Models\Pasien;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\OperasionalController;
 use App\Http\Controllers\Api\JadwalDokterController;
 use App\Http\Controllers\Api\RegisterPasienController;
+use App\Http\Controllers\Api\PerawatController;
 
 
 // Pasien
@@ -102,10 +104,10 @@ Route::get('/admin/rekam-medis', function (Request $request) {
 
     return response()->json([
         'rekam_medis' => $rekam,
-        'kunjungan'   => $kunjungan,
-        'klinik_id'   => $idKlinik,
-        'status'      => 'success',
-        'obat'        => $obat
+        'kunjungan' => $kunjungan,
+        'klinik_id' => $idKlinik,
+        'status' => 'success',
+        'obat' => $obat
     ]);
 });
 
@@ -185,9 +187,27 @@ Route::get('/admin/rekam-medis', function (Request $request) {
 
 // Jadwal Dokter
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/admin/jadwal-dokter', [JadwalDokterController::class, 'index']);
-    Route::post('/admin/jadwal-dokter/store', [JadwalDokterController::class, 'store']);
-    Route::get('/admin/jadwal-dokter/list-dokter', [JadwalDokterController::class, 'getDoctorsList']);
-    Route::put('/admin/jadwal-dokter/{id}', [JadwalDokterController::class, 'edit']);
+    Route::prefix('admin')->group(function () {
+
+        // --- MANAJEMEN PEGAWAI (STAFF) ---
+        // Endpoint CRUD lengkap (Index, Store, Show, Update, Destroy)
+        Route::apiResource('staff', StaffController::class);
+
+        // --- MANAJEMEN JADWAL DOKTER ---
+        // Endpoint Helper (List Klinik & List Dokter)
+        Route::get('/jadwal-dokter/list-klinik', [JadwalDokterController::class, 'getClinicsList']);
+        Route::get('/jadwal-dokter/list-dokter', [JadwalDokterController::class, 'getDoctorsList']);
+
+        // Endpoint CRUD Jadwal
+        Route::get('/jadwal-dokter', [JadwalDokterController::class, 'index']);
+        Route::post('/jadwal-dokter/store', [JadwalDokterController::class, 'store']);
+        Route::put('/jadwal-dokter/update/{id}', [JadwalDokterController::class, 'edit']); // {id} disini adalah staff_id
+
+    });
 });
 // Rujukan Digital
+
+
+// Perawat (yang saya pakai)
+Route::get('/perawat/antrian', [PerawatController::class, 'index']);
+Route::post('/perawat/input-vital/{id}', [PerawatController::class, 'storeVital']);

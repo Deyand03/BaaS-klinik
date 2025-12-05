@@ -104,7 +104,6 @@ class DatabaseSeeder extends Seeder
             'jam_mulai' => '08:00:00',
             'jam_selesai' => '12:00:00',
             'kuota_harian' => 20,
-            'status_aktif' => true,
         ]);
 
 
