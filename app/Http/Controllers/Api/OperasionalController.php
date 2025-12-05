@@ -18,14 +18,24 @@ class OperasionalController extends Controller
         // Debugging: Cek apa yang dikirim Frontend di file laravel.log
         Log::info('API Antrian Hit. Filters:', $request->all());
 
-        $query = Kunjungan::with(['pasien', 'dokter', 'klinik'])
-            ->orderBy('id', 'desc');
+        $query = Kunjungan::with(['pasien', 'dokter', 'klinik', 'jadwal'])
+            ->orderBy('id', 'asc');
 
         // BEST PRACTICE: Pakai 'filled' (Lebih aman daripada 'has')
         if ($request->filled('status_filter')) {
             $query->where('status', $request->status_filter);
         }
-
+        if ($request->has('search')) {
+            $searchTerm = $request->input('search');
+            
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('no_antrian', 'like', '%' . $searchTerm . '%')
+                ->orWhereHas('pasien', function ($r) use ($searchTerm) {
+                    $r->where('nama_lengkap', 'like', '%' . $searchTerm . '%')
+                        ->orWhere('nik', 'like', '%' . $searchTerm . '%');
+                });
+            });
+        }
         $antrian = $query->get();
 
         return response()->json([
@@ -43,7 +53,7 @@ class OperasionalController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $kunjungan = Kunjungan::find($id);
-
+        
         if (!$kunjungan) {
             return response()->json(['message' => 'Data tidak ditemukan'], 404);
         }
@@ -52,7 +62,7 @@ class OperasionalController extends Controller
         $request->validate([
             'status' => 'required|in:booking,menunggu_perawat,menunggu_dokter,menunggu_pembayaran,selesai,batal'
         ]);
-
+        
         // Update Status
         $kunjungan->update([
             'status' => $request->status
