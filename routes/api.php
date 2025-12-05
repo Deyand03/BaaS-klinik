@@ -10,6 +10,7 @@ use App\Models\PemeriksaanMata;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\PembayaranController;
 use App\Http\Controllers\Api\OperasionalController;
 use App\Http\Controllers\Api\JadwalDokterController;
 
@@ -166,6 +167,10 @@ Route::get('/admin/rekam-medis', function (Request $request) {
 
 
 // Pembayaran
+Route::middleware('auth:sanctum')->group(function () {
+    // Route yang bersih, hanya menunjuk ke Controller
+    Route::post('/pembayaran/store', [PembayaranController::class, 'store']);
+});
 
 // Jadwal Dokter
 Route::middleware('auth:sanctum')->group(function () {
