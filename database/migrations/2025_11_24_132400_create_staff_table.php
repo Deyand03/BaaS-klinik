@@ -20,6 +20,7 @@ return new class extends Migration {
             $table->string('spesialisasi')->nullable(); // Khusus dokter
             $table->string('tentang')->nullable(); // Khusus dokter
             $table->string('pengalaman')->nullable(); // Khusus dokter
+            $table->string('foto_profil')->nullable(); // Khusus dokter
             $table->timestamps();
         });
     }

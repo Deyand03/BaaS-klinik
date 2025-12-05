@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 
 class StaffController extends Controller
@@ -47,6 +48,7 @@ class StaffController extends Controller
             'no_hp' => 'nullable|string|max:15',
             // Validasi khusus jika peran adalah dokter
             'spesialisasi' => 'nullable|required_if:peran,dokter',
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi foto
         ]);
 
         DB::beginTransaction(); // Mulai Transaksi Database
@@ -57,8 +59,12 @@ class StaffController extends Controller
                 'password' => Hash::make($request->password),
                 'role' => 'staff', // Sesuai enum di schema users
             ]);
+            $fotoPath = null;
+            if ($request->hasFile('foto_profil') && $request->peran == 'dokter') {
+                // Simpan di folder: storage/app/public/dokter-photos
+                $fotoPath = $request->file('foto_profil')->store('dokter-photos', 'public');
+            }
 
-            // 2. Buat Data Staff
             Staff::create([
                 'user_id' => $user->id,
                 'id_klinik' => $request->id_klinik,
@@ -68,6 +74,7 @@ class StaffController extends Controller
                 'spesialisasi' => $request->peran == 'dokter' ? $request->spesialisasi : null,
                 'tentang' => $request->peran == 'dokter' ? $request->tentang : null,
                 'pengalaman' => $request->peran == 'dokter' ? $request->pengalaman : null,
+                'foto_profil' => $fotoPath, // Simpan path-nya
             ]);
 
             DB::commit(); // Simpan permanen jika semua sukses
@@ -100,6 +107,7 @@ class StaffController extends Controller
             'password' => 'nullable|min:6', // Password boleh kosong kalau gak mau diganti
             'id_klinik' => 'required|exists:klinik,id',
             'peran' => 'required|in:dokter,admin,perawat,resepsionis,kasir',
+            'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi foto
         ]);
 
         DB::beginTransaction();
@@ -111,7 +119,16 @@ class StaffController extends Controller
             }
             // Update tabel users
             User::where('id', $staff->user_id)->update($userData);
+            $fotoPath = $staff->foto_profil; // Default pakai foto lama
 
+            if ($request->hasFile('foto_profil') && $request->peran == 'dokter') {
+                // Hapus foto lama jika ada
+                if ($staff->foto_profil && Storage::disk('public')->exists($staff->foto_profil)) {
+                    Storage::disk('public')->delete($staff->foto_profil);
+                }
+                // Upload foto baru
+                $fotoPath = $request->file('foto_profil')->store('dokter-photos', 'public');
+            }
             // 2. Update Data Staff
             $staff->update([
                 'id_klinik' => $request->id_klinik,
@@ -121,6 +138,7 @@ class StaffController extends Controller
                 'spesialisasi' => $request->peran == 'dokter' ? $request->spesialisasi : null,
                 'tentang' => $request->peran == 'dokter' ? $request->tentang : null,
                 'pengalaman' => $request->peran == 'dokter' ? $request->pengalaman : null,
+                'foto_profil' => $fotoPath,
             ]);
 
             DB::commit();
@@ -135,16 +153,17 @@ class StaffController extends Controller
     public function destroy($id)
     {
         $staff = Staff::find($id);
-        if (!$staff)
-            return response()->json(['message' => 'Not Found'], 404);
+        if (!$staff) return response()->json(['message' => 'Not Found'], 404);
 
-        // Hapus User-nya, otomatis Staff terhapus karena CascadeOnDelete di Schema
-        $user = User::find($staff->user_id);
-        if ($user) {
-            $user->delete();
-        } else {
-            $staff->delete(); // Jaga-jaga kalau user-nya udah ilang duluan
+        // Hapus Foto Fisik
+        if ($staff->foto_profil && Storage::disk('public')->exists($staff->foto_profil)) {
+            Storage::disk('public')->delete($staff->foto_profil);
         }
+
+        // Hapus Data (User & Staff) - logic lama
+        $user = User::find($staff->user_id);
+        if ($user) $user->delete();
+        else $staff->delete();
 
         return response()->json(['message' => 'Pegawai berhasil dihapus']);
     }
