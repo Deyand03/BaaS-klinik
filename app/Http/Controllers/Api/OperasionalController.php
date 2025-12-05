@@ -18,21 +18,48 @@ class OperasionalController extends Controller
         // Debugging: Cek apa yang dikirim Frontend di file laravel.log
         Log::info('API Antrian Hit. Filters:', $request->all());
 
-        $query = Kunjungan::with(['pasien', 'dokter', 'klinik'])
+        $queryTable = Kunjungan::with(['pasien', 'klinik', 'dokter'])
             ->orderBy('id', 'desc');
 
         // BEST PRACTICE: Pakai 'filled' (Lebih aman daripada 'has')
         if ($request->filled('status_filter')) {
-            $query->where('status', $request->status_filter);
+            $queryTable->where('status', $request->status_filter);
         }
 
-        $antrian = $query->get();
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $queryTable->where(function($q) use ($search) {
+                // Cari berdasarkan No Antrian
+                $q->where('no_antrian', 'like', "%{$search}%")
+                  // ATAU cari berdasarkan Nama Pasien (lewat relasi)
+                  ->orWhereHas('pasien', function($subQ) use ($search) {
+                      $subQ->where('nama_lengkap', 'like', "%{$search}%");
+                  });
+            });
+        }
+
+        $tableData = $queryTable->paginate(10); 
+        $queryChart = Kunjungan::with('klinik');
+
+        if ($request->filled('month')) {
+            $queryChart->whereMonth('tgl_kunjungan', $request->month);
+            // Opsional: Filter tahun juga (default tahun sekarang)
+            $year = $request->input('year', date('Y'));
+            $queryChart->whereYear('tgl_kunjungan', date('Y'));
+        }
+        $chartData = $queryChart->get();
+        $totalAllTime = Kunjungan::count();
 
         return response()->json([
             'status' => 'success',
-            'data' => $antrian
+            'table' => $tableData, 
+            'chart_source' => $chartData,
+            'meta' => [
+                'total_all_time' => $totalAllTime
+            ]
         ]);
     }
+
 
     /**
      * 2. UPDATE STATUS (Estafet)
