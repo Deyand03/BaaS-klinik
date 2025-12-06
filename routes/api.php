@@ -1,23 +1,25 @@
 <?php
 
-use App\Http\Controllers\Api\StaffController;
 use App\Models\Obat;
 use App\Models\Staff;
 use App\Models\Pasien;
-use App\Models\JadwalPraktek;
 use App\Models\Kunjungan;
 use App\Models\RekamMedis;
 use Illuminate\Http\Request;
+use App\Models\JadwalPraktek;
 use App\Models\PemeriksaanGizi;
 use App\Models\PemeriksaanMata;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\StaffController;
+use App\Http\Controllers\Api\PasienController;
 use App\Http\Controllers\Api\BookingController;
+use App\Http\Controllers\Api\PerawatController;
+use App\Http\Controllers\Api\RiwayatController;
 use App\Http\Controllers\Api\PembayaranController;
 use App\Http\Controllers\Api\OperasionalController;
 use App\Http\Controllers\Api\JadwalDokterController;
 use App\Http\Controllers\Api\RegisterPasienController;
-use App\Http\Controllers\Api\PerawatController;
 
 
 // Pasien
@@ -188,6 +190,7 @@ Route::get('/admin/rekam-medis', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     // Route yang bersih, hanya menunjuk ke Controller
     Route::post('/pembayaran/store', [PembayaranController::class, 'store']);
+    Route::get('/pasien/riwayat', [RiwayatController::class, 'index']);
 });
 
 // Jadwal Dokter
@@ -207,6 +210,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/jadwal-dokter', [JadwalDokterController::class, 'index']);
         Route::post('/jadwal-dokter/store', [JadwalDokterController::class, 'store']);
         Route::put('/jadwal-dokter/update/{id}', [JadwalDokterController::class, 'edit']); // {id} disini adalah staff_id
+        
+        
 
     });
 });
