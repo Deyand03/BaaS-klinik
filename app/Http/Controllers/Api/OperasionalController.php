@@ -18,11 +18,14 @@ class OperasionalController extends Controller
         // Debugging: Cek parameter yang masuk
         Log::info('API Data Hit. Filters:', $request->all());
 
+        // --- SOLUSI CONFLICT: AMBIL DARI MAIN ---
+        // Kita butuh inisialisasi ini agar tidak error di return bawah
         $clinicsList = [];
         $doctorsList = [];
         $tableData = null; // Inisialisasi default
         $chartData = [];
         $totalAllTime = 0;
+        // ----------------------------------------
 
         // 1. DATA PASIEN
         if ($request->type == 'patients') {
@@ -113,7 +116,6 @@ class OperasionalController extends Controller
 
     /**
      * 2. UPDATE STATUS (Estafet)
-     * Diambil dari branch main
      */
     public function updateStatus(Request $request, $id)
     {
