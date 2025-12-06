@@ -20,6 +20,9 @@ class OperasionalController extends Controller
 
         $clinicsList = [];
         $doctorsList = [];
+        $tableData = null; // Inisialisasi default
+        $chartData = [];
+        $totalAllTime = 0;
 
         // 1. DATA PASIEN
         if ($request->type == 'patients') {
@@ -35,6 +38,9 @@ class OperasionalController extends Controller
             if ($request->filled('month_table')) {
                 $queryTable->whereMonth('created_at', $request->month_table);
             }
+            
+            $tableData = $queryTable->paginate(10);
+            $totalAllTime = Pasien::count(); // Hitung total pasien untuk meta
 
         } else {
             // 2. DATA KUNJUNGAN (ANTRIAN)
@@ -58,18 +64,15 @@ class OperasionalController extends Controller
                 $queryTable->whereMonth('tgl_kunjungan', $request->month_table);
             }
 
-            // --- PERBAIKAN PENTING DI SINI (Sesuai api.php) ---
-            
-            // 1. Filter Klinik: Gunakan 'id_klinik' bukan 'klinik_id'
+            // 1. Filter Klinik: Gunakan 'id_klinik'
             if ($request->filled('klinik_id')) {
                 $queryTable->where('id_klinik', $request->klinik_id);
             }
             
-            // 2. Filter Dokter: Gunakan 'id_dokter' bukan 'dokter_id'
+            // 2. Filter Dokter: Gunakan 'id_dokter'
             if ($request->filled('dokter_id')) {
                 $queryTable->where('id_dokter', $request->dokter_id);
             }
-            // ---------------------------------------------------
 
             // Search
             if ($request->filled('search')) {
@@ -81,18 +84,18 @@ class OperasionalController extends Controller
                       });
                 });
             }
-        }
 
-        $tableData = $queryTable->paginate(10); 
-        
-        // Data Chart
-        $queryChart = Kunjungan::with('klinik');
-        if ($request->filled('month')) {
-            $queryChart->whereMonth('tgl_kunjungan', $request->month);
-            $queryChart->whereYear('tgl_kunjungan', date('Y'));
+            $tableData = $queryTable->paginate(10); 
+            
+            // Data Chart
+            $queryChart = Kunjungan::with('klinik');
+            if ($request->filled('month')) {
+                $queryChart->whereMonth('tgl_kunjungan', $request->month);
+                $queryChart->whereYear('tgl_kunjungan', date('Y'));
+            }
+            $chartData = $queryChart->get();
+            $totalAllTime = Pasien::count(); 
         }
-        $chartData = $queryChart->get();
-        $totalAllTime = Pasien::count(); 
 
         return response()->json([
             'status' => 'success',
@@ -108,4 +111,28 @@ class OperasionalController extends Controller
         ]);
     }
 
+    /**
+     * 2. UPDATE STATUS (Estafet)
+     * Diambil dari branch main
+     */
+    public function updateStatus(Request $request, $id)
+    {
+        $kunjungan = Kunjungan::find($id);
+        
+        if (!$kunjungan) {
+            return response()->json(['message' => 'Data tidak ditemukan'], 404);
+        }
+
+        // Validasi input status
+        $request->validate([
+            'status' => 'required|in:booking,menunggu_perawat,menunggu_dokter,menunggu_pembayaran,selesai,batal'
+        ]);
+        
+        // Update Status
+        $kunjungan->update([
+            'status' => $request->status
+        ]);
+
+        return response()->json(['message' => 'Status berhasil diupdate', 'data' => $kunjungan]);
+    }
 }
