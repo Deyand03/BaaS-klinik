@@ -16,6 +16,7 @@ use App\Http\Controllers\Api\PasienController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\PerawatController;
 use App\Http\Controllers\Api\RiwayatController;
+use App\Http\Controllers\Api\KunjunganController;
 use App\Http\Controllers\Api\PembayaranController;
 use App\Http\Controllers\Api\OperasionalController;
 use App\Http\Controllers\Api\JadwalDokterController;
@@ -63,7 +64,9 @@ Route::prefix('resepsionis')->group(function () {
 });
 
 
-
+Route::get('/kunjungan/index', [KunjunganController::class, 'index']);
+Route::get('/kunjungan/detail', [KunjunganController::class, 'detail']);
+Route::post('/kunjungan/resep/add', [KunjunganController::class, 'add']);
 // Rekam Medis
 Route::get('/admin/rekam-medis', function (Request $request) {
 
