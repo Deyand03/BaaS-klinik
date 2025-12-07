@@ -22,8 +22,6 @@ use App\Http\Controllers\Api\OperasionalController;
 use App\Http\Controllers\Api\JadwalDokterController;
 use App\Http\Controllers\Api\RegisterPasienController;
 
-use App\Http\Controllers\Api\KunjunganController;
-
 // Pasien
 // Beranda, Login, Regis (Agne)
 Route::post('/login', [AuthController::class, 'login']);
