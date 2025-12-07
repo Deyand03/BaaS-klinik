@@ -21,6 +21,7 @@ class KunjunganController extends Controller
                             'kunjungan.keluhan'
                         )
                         ->where('kunjungan.id_dokter', '=', $request->id_dokter)
+                        ->where('kunjungan.status', '=', 'menunggu_dokter')
                         ->get();
         $obat = DB::table('obat')->get();
         return response()->json([
@@ -59,6 +60,7 @@ class KunjunganController extends Controller
         $poli = $request->poli ?? '';
         $alasan = $request->alasan ?? '';
         $tujuan = $request->tujuan ?? '';
+        $tindakan = $request->tindakan;
 
 
         DB::beginTransaction();
@@ -82,6 +84,16 @@ class KunjunganController extends Controller
                 'updated_at' => now()
             ]);
 
+            $updateRekamMedis = DB::table('rekam_medis')->where('id', $rekam_medis_id)->update([
+                'tindakan' => $catatan,
+                'diagnosa'=> $diagnosa,
+                'catatan_dokter'=>$catatan
+            ]);
+
+            $updateKunjungan = DB::table('kunjungan')->where('id', $id_kunjungan)->update([
+                'status' => 'menunggu_pembayaran'
+            ]);
+
             if($alasan != null && $poli != null && $tujuan != null){
                 DB::table('rujukan')->insert([
                     'id_kunjungan' => $id_kunjungan,
@@ -93,7 +105,7 @@ class KunjunganController extends Controller
                 ]);
             }
 
-            if($insertResep > 0 && $insertPembayaran > 0){
+            if($insertResep > 0 && $insertPembayaran > 0 && $updateKunjungan > 0 && $updateRekamMedis > 0){
                 DB::commit();
                 return redirect()->back()->with('status', 'Berhasil menginsert data');
             }
