@@ -37,6 +37,6 @@ Route::get('/clear-cache', function() {
     Artisan::call('cache:clear');
     return "Cache Cleared!";
 });
-require __DIR__ . '/auth.php';
+// require __DIR__ . '/auth.php';
 
 
