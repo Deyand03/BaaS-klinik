@@ -17,9 +17,9 @@ use App\Http\Controllers\Api\JadwalDokterController;
 use App\Http\Controllers\Api\RegisterPasienController;
 
 // Pasien
-// Beranda, Login, Regis 
-Route::post('/login', [AuthController::class, 'login']);
-Route::post('/register', [AuthController::class, 'register']); // <--- TAMBAHKAN INI
+// Beranda, Login, Regis
+Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout.process', [AuthController::class, 'logout']);
