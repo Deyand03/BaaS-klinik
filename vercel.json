@@ -2,8 +2,7 @@
     "version": 2,
     "framework": null,
     "functions": {
-        "api/*.php": { "runtime": "vercel-php@0.7.2" },
-        "public/index.php": { "runtime": "vercel-php@0.7.2" }
+        "api/index.php": { "runtime": "vercel-php@0.7.2" }
     },
     "routes": [
         {
@@ -16,7 +15,7 @@
         },
         {
             "src": "/(.*)",
-            "dest": "/public/index.php"
+            "dest": "/api/index.php"
         }
     ],
     "env": {
