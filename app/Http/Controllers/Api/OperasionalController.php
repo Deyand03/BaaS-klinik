@@ -17,7 +17,7 @@ class OperasionalController extends Controller
     {
         // Debugging: Cek parameter yang masuk
         Log::info('API Data Hit. Filters:', $request->all());
-
+        
         // --- SOLUSI CONFLICT: AMBIL DARI MAIN ---
         // Kita butuh inisialisasi ini agar tidak error di return bawah
         $clinicsList = [];
@@ -26,6 +26,15 @@ class OperasionalController extends Controller
         $chartData = [];
         $totalAllTime = 0;
         // ----------------------------------------
+        
+        // Data Chart
+        $queryChart = Kunjungan::with('klinik');
+        if ($request->filled('month')) {
+                $queryChart->whereMonth('tgl_kunjungan', $request->month);
+                $queryChart->whereYear('tgl_kunjungan', date('Y'));
+            }
+            $chartData = $queryChart->get();
+            $totalAllTime = Pasien::count(); 
 
         // 1. DATA PASIEN
         if ($request->type == 'patients') {
@@ -89,15 +98,6 @@ class OperasionalController extends Controller
             }
 
             $tableData = $queryTable->paginate(10); 
-            
-            // Data Chart
-            $queryChart = Kunjungan::with('klinik');
-            if ($request->filled('month')) {
-                $queryChart->whereMonth('tgl_kunjungan', $request->month);
-                $queryChart->whereYear('tgl_kunjungan', date('Y'));
-            }
-            $chartData = $queryChart->get();
-            $totalAllTime = Pasien::count(); 
         }
 
         return response()->json([
