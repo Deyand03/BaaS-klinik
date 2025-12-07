@@ -17,7 +17,7 @@ class OperasionalController extends Controller
     {
         // Debugging: Cek parameter yang masuk
         Log::info('API Data Hit. Filters:', $request->all());
-
+        
         // --- SOLUSI CONFLICT: AMBIL DARI MAIN ---
         // Kita butuh inisialisasi ini agar tidak error di return bawah
         $clinicsList = [];

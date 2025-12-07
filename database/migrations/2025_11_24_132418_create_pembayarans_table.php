@@ -18,9 +18,9 @@ return new class extends Migration {
             $table->decimal('total_biaya', 12, 2);
 
             // REVISI DOSEN: Tambah opsi metode bayar
-            $table->enum('metode_bayar', ['cash', 'qris', 'transfer', 'ewallet'])->default('cash');
+            $table->enum('metode_bayar', ['cash', 'qris', 'transfer'])->default('cash');
 
-            $table->enum('status', ['belum_bayar', 'sudah_bayar', 'batal'])->default('belum_bayar');
+            $table->enum('status', ['belum_bayar', 'sudah_bayar'])->default('belum_bayar');
             $table->timestamps();
         });
     }
