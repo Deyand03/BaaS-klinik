@@ -22,6 +22,7 @@ use App\Http\Controllers\Api\OperasionalController;
 use App\Http\Controllers\Api\JadwalDokterController;
 use App\Http\Controllers\Api\RegisterPasienController;
 
+use App\Http\Controllers\Api\KunjunganController;
 
 // Pasien
 // Beranda, Login, Regis (Agne)
@@ -117,6 +118,9 @@ Route::get('/admin/rekam-medis', function (Request $request) {
     ]);
 });
 
+Route::get('/kunjungan/index', [KunjunganController::class, 'index']);
+Route::get('/kunjungan/detail', [KunjunganController::class, 'detail']);
+Route::post('/kunjungan/resep/add', [KunjunganController::class, 'add']);
 // Route::middleware('auth:sanctum')->post('/rekam-medis/tambah', function (Request $request) {
 
 //     $validated = $request->validate([
