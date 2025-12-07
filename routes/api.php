@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\StaffController;
 use App\Http\Controllers\Api\PasienController;
+use App\Http\Controllers\Api\PublicController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\PerawatController;
 use App\Http\Controllers\Api\RiwayatController;
@@ -27,6 +28,11 @@ use App\Http\Controllers\Api\RegisterPasienController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']); // <--- TAMBAHKAN INI
 
+// Public
+Route::get('/public/doctors', [PublicController::class, 'getDoctors']);
+Route::get('/public/doctors/{id}', [PublicController::class, 'getDoctorProfile']);
+Route::get('/public/clinics', [PublicController::class, 'getClinics']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout.process', [AuthController::class, 'logout']);
     Route::get('/profile', function (Request $request) {
@@ -34,7 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Route Booking
-    Route::post('/booking', [BookingController::class, 'store']);
+    Route::post('/booking/store', [BookingController::class, 'store']);
     Route::get('/booking/{id}', [BookingController::class, 'show']);
 
     // API OPERASIONAL
