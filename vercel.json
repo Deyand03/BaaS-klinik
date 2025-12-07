@@ -1,34 +1,24 @@
 {
     "version": 2,
     "framework": null,
-    "builds": [
-        {
-            "src": "/api/index.php",
-            "use": "vercel-php@0.7.2"
-        },
-        {
-            "src": "/public/**",
-            "use": "@vercel/static"
-        }
-    ],
+    "functions": {
+        "api/*.php": { "runtime": "vercel-php@0.7.2" },
+        "public/index.php": { "runtime": "vercel-php@0.7.2" }
+    },
     "routes": [
         {
-            "src": "/(build|css|js|images|storage|svg)/(.*)",
+            "src": "/(css|js|images)/(.*)",
             "dest": "/public/$1/$2"
         },
         {
-            "src": "/favicon.ico",
-            "dest": "/public/favicon.ico"
-        },
-        {
             "src": "/(.*)",
-            "dest": "/api/index.php"
+            "dest": "/public/index.php"
         }
     ],
     "env": {
         "APP_ENV": "production",
         "APP_DEBUG": "true",
-        "APP_URL": "https://klinikr1.vercel.app",
+        "APP_URL": "https://baas-klinik.vercel.app",
         "APP_CONFIG_CACHE": "/tmp/config.php",
         "APP_EVENTS_CACHE": "/tmp/events.php",
         "APP_PACKAGES_CACHE": "/tmp/packages.php",
