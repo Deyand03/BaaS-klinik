@@ -28,14 +28,14 @@ class OperasionalController extends Controller
         // ----------------------------------------
         
         // Data Chart
-        $queryChart = Kunjungan::with('klinik');
-        if ($request->filled('month')) {
-                $queryChart->whereMonth('tgl_kunjungan', $request->month);
-                $queryChart->whereYear('tgl_kunjungan', date('Y'));
-            }
-            $chartData = $queryChart->get();
-            $totalAllTime = Pasien::count(); 
-
+           $queryChart = Kunjungan::with('klinik');
+           if ($request->filled('month')) {
+               $queryChart->whereMonth('tgl_kunjungan', $request->month);
+               $queryChart->whereYear('tgl_kunjungan', date('Y'));
+           }
+           $chartData = $queryChart->get();
+           $totalAllTime = Pasien::count(); 
+           
         // 1. DATA PASIEN
         if ($request->type == 'patients') {
             $queryTable = Pasien::orderBy('created_at', 'desc');
@@ -63,7 +63,7 @@ class OperasionalController extends Controller
                 ->select('id', 'nama_lengkap as nama') 
                 ->get();
 
-            $queryTable = Kunjungan::with(['pasien', 'klinik', 'dokter'])
+            $queryTable = Kunjungan::with(['pasien', 'klinik', 'dokter','jadwal'])
                 ->orderBy('id', 'desc');
 
             // Filter Status
@@ -98,6 +98,8 @@ class OperasionalController extends Controller
             }
 
             $tableData = $queryTable->paginate(10); 
+            
+           
         }
 
         return response()->json([
