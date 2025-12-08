@@ -15,6 +15,7 @@ use App\Http\Controllers\Api\PembayaranController;
 use App\Http\Controllers\Api\OperasionalController;
 use App\Http\Controllers\Api\JadwalDokterController;
 use App\Http\Controllers\Api\RegisterPasienController;
+use App\Http\Controllers\Api\KasirOperasionalController;
 
 // Pasien
 // Beranda, Login, Regis
@@ -179,7 +180,7 @@ Route::post('/kunjungan/resep/add', [KunjunganController::class, 'add']);
 Route::middleware('auth:sanctum')->group(function () {
     // Route yang bersih, hanya menunjuk ke Controller
     Route::post('/pembayaran/store', [PembayaranController::class, 'store']);
-    Route::get('/pasien/riwayat', [RiwayatController::class, 'index']);
+    Route::get('/kasir/antrian', [KasirOperasionalController::class, 'index']);
 });
 
 // Jadwal Dokter
