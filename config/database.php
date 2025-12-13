@@ -59,7 +59,12 @@ return [
             'strict' => true,
             'engine' => null,
             'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+
+                // 1. Paksa mode SSL. Jika di .env tidak ada, pakai default path sertifikat yang kita download
+                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA') ?? storage_path('certs/cacert.pem'),
+
+                // 2. Tetap disable verifikasi nama server biar ga ribet di local
+                PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT => false,
             ]) : [],
         ],
 
