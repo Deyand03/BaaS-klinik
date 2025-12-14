@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // API OPERASIONAL
     Route::get('/admin/antrian', [OperasionalController::class, 'index']);
     Route::post('/admin/antrian/{id}/status', [OperasionalController::class, 'updateStatus']);
+    Route::get('/pasien/riwayat', [RiwayatController::class, 'index']);
 });
 
 // RESEPSIONIS – REGISTER PASIEN
