@@ -339,51 +339,51 @@ class DatabaseSeeder extends Seeder
             'status' => 'menunggu_perawat',
         ]);
 
-        // KASUS 5 & 6: Di Dokter
-        $kunjunganRizky = Kunjungan::create([
-            'id_klinik' => 1,
-            'id_pasien' => $pasienRizky->id,
-            'id_dokter' => $stafDokter->id,
-            'id_jadwal' => $jadwal->id,
-            'tgl_kunjungan' => now()->toDateString(),
-            'no_antrian' => 'A-005',
-            'keluhan' => 'Nyeri perut',
-            'status' => 'menunggu_dokter',
-        ]);
+        // // KASUS 5 & 6: Di Dokter
+        // $kunjunganRizky = Kunjungan::create([
+        //     'id_klinik' => 1,
+        //     'id_pasien' => $pasienRizky->id,
+        //     'id_dokter' => $stafDokter->id,
+        //     'id_jadwal' => $jadwal->id,
+        //     'tgl_kunjungan' => now()->toDateString(),
+        //     'no_antrian' => 'A-005',
+        //     'keluhan' => 'Nyeri perut',
+        //     'status' => 'menunggu_dokter',
+        // ]);
 
-        $kunjunganLina = Kunjungan::create([
-            'id_klinik' => 1,
-            'id_pasien' => $pasienLina->id,
-            'id_dokter' => $stafDokter->id,
-            'id_jadwal' => $jadwal->id,
-            'tgl_kunjungan' => now()->toDateString(),
-            'no_antrian' => 'A-006',
-            'keluhan' => 'Tekanan darah tinggi',
-            'status' => 'menunggu_dokter',
-        ]);
+        // $kunjunganLina = Kunjungan::create([
+        //     'id_klinik' => 1,
+        //     'id_pasien' => $pasienLina->id,
+        //     'id_dokter' => $stafDokter->id,
+        //     'id_jadwal' => $jadwal->id,
+        //     'tgl_kunjungan' => now()->toDateString(),
+        //     'no_antrian' => 'A-006',
+        //     'keluhan' => 'Tekanan darah tinggi',
+        //     'status' => 'menunggu_dokter',
+        // ]);
 
-        // KASUS 7 & 8: Di Kasir (Menunggu Pembayaran)
-        $kunjunganAgus = Kunjungan::create([
-            'id_klinik' => 1,
-            'id_pasien' => $pasienAgus->id,
-            'id_dokter' => $stafDokter->id,
-            'id_jadwal' => $jadwal->id,
-            'tgl_kunjungan' => now()->toDateString(),
-            'no_antrian' => 'A-007',
-            'keluhan' => 'Luka di tangan',
-            'status' => 'menunggu_pembayaran',
-        ]);
+        // // KASUS 7 & 8: Di Kasir (Menunggu Pembayaran)
+        // $kunjunganAgus = Kunjungan::create([
+        //     'id_klinik' => 1,
+        //     'id_pasien' => $pasienAgus->id,
+        //     'id_dokter' => $stafDokter->id,
+        //     'id_jadwal' => $jadwal->id,
+        //     'tgl_kunjungan' => now()->toDateString(),
+        //     'no_antrian' => 'A-007',
+        //     'keluhan' => 'Luka di tangan',
+        //     'status' => 'menunggu_pembayaran',
+        // ]);
 
-        $kunjunganTari = Kunjungan::create([
-            'id_klinik' => 1,
-            'id_pasien' => $pasienTari->id,
-            'id_dokter' => $stafDokter->id,
-            'id_jadwal' => $jadwal->id,
-            'tgl_kunjungan' => now()->toDateString(),
-            'no_antrian' => 'A-008',
-            'keluhan' => 'Kontrol rutin kesehatan',
-            'status' => 'menunggu_pembayaran',
-        ]);
+        // $kunjunganTari = Kunjungan::create([
+        //     'id_klinik' => 1,
+        //     'id_pasien' => $pasienTari->id,
+        //     'id_dokter' => $stafDokter->id,
+        //     'id_jadwal' => $jadwal->id,
+        //     'tgl_kunjungan' => now()->toDateString(),
+        //     'no_antrian' => 'A-008',
+        //     'keluhan' => 'Kontrol rutin kesehatan',
+        //     'status' => 'menunggu_pembayaran',
+        // ]);
 
         // Rekam Medis Andi
         $rekamAndi = RekamMedis::create([
