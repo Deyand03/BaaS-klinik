@@ -52,13 +52,21 @@ class AuthController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:users',
             'password' => 'required|string|min:8',
-
-            // Validasi Data Medis
-            'nik' => 'required|string|unique:pasiens,nik', // Pastikan NIK unik di tabel pasiens
+            'nik' => 'required|numeric|digits:16|unique:pasiens,nik',
             'no_hp' => 'required|string',
             'tgl_lahir' => 'required|date',
             'jenis_kelamin' => 'required|in:Laki-laki,Perempuan',
             'alamat_domisili' => 'required|string',
+        ], [
+            // --- TERJEMAHAN PESAN ERROR ---
+            'required' => ':attribute wajib diisi.',
+            'email.email' => 'Format email tidak valid.',
+            'email.unique' => 'Email ini sudah terdaftar. Silakan login.',
+            'min' => ':attribute minimal harus berisi :min karakter.',
+            'numeric' => ':attribute harus berupa angka.',
+            'digits' => ':attribute harus berjumlah :digits digit.',
+            'nik.unique' => 'NIK ini sudah terdaftar dalam sistem.',
+            'in' => 'Pilihan :attribute tidak valid.',
         ]);
 
         DB::beginTransaction();
